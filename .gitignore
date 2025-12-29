@@ -137,7 +137,6 @@ Thumbs.db
 data/**
 !data/coco/dataset.yaml
 !data/test_dataset/dataset.yaml
-results/
 *.jpg
 *.png
 *.mp4
