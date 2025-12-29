@@ -24,7 +24,6 @@ pip install -r requirements.txt
 ### 2. Download Dataset
 ```bash
 python scripts/download_coco.py --output data/coco --split val2017
-python scripts/create_test_dataset.py --num-images 50
 ```
 
 ### 3. Train
@@ -60,8 +59,7 @@ src/
     └── visualization.py   # Visualization
 
 scripts/
-├── download_coco.py       # COCO downloader
-└── create_test_dataset.py # Test set creation
+└── download_coco.py       # COCO downloader
 ```
 
 ## Configuration
@@ -101,10 +99,7 @@ Check GPU: `python verify_cuda_detailed.py`
 ## Training Examples
 
 ```bash
-# Quick test (3 epochs, 50 images)
-python -m src.train --data data/test_dataset/dataset.yaml --epochs 3
-
-# Full COCO (50 epochs, 5000 images)
+# Standard training (COCO val2017: 5000 images, 50 epochs)
 python -m src.train --data data/coco/dataset.yaml --epochs 50
 
 # RL optimization
