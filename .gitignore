@@ -140,3 +140,7 @@ data/**
 *.jpg
 *.png
 *.mp4
+
+# But include final training results
+!results/coco_full/passenger_detection/results.png
+!results/coco_full/passenger_detection/training_summary.png
