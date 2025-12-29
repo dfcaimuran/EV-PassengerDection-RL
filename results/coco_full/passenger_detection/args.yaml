@@ -13,7 +13,7 @@ cache: false
 device: '0'
 workers: 4
 project: results/coco_full
-name: passenger_detection
+name: passenger_detection5
 exist_ok: false
 pretrained: true
 optimizer: SGD
@@ -103,4 +103,4 @@ auto_augment: randaugment
 erasing: 0.4
 cfg: null
 tracker: botsort.yaml
-save_dir: D:\Github\EV-PassengerDection-RL\results\coco_full\passenger_detection
+save_dir: D:\Github\EV-PassengerDection-RL\results\coco_full\passenger_detection5
