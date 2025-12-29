@@ -144,3 +144,4 @@ data/**
 # But include final training results
 !results/coco_full/passenger_detection/results.png
 !results/coco_full/passenger_detection/training_summary.png
+!results/coco_full/passenger_detection/inference_results/inference_*.jpg
