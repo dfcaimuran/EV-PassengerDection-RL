@@ -1,0 +1,22 @@
+# Core dependencies
+opencv-python>=4.5.0
+numpy>=1.21.0
+pillow>=8.0.0
+torch>=1.9.0
+torchvision>=0.10.0
+scikit-learn>=0.24.0
+
+# YOLOv11 and RL dependencies
+ultralytics>=8.0.0
+stable-baselines3>=2.0.0
+gymnasium>=0.28.0
+
+# Development dependencies
+pytest>=7.0.0
+pytest-cov>=3.0.0
+black>=22.0.0
+ruff>=0.1.0
+mypy>=0.990
+pre-commit>=2.20.0
+jupyter>=1.0.0
+ipython>=8.0.0

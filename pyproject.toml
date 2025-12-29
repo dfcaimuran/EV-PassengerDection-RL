@@ -1,0 +1,35 @@
+[build-system]
+requires = ["setuptools>=61.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "ev-passenger-detection"
+version = "0.1.0"
+description = "YOLOv11-based passenger detection with PPO reinforcement learning"
+readme = "README.md"
+requires-python = ">=3.9"
+license = {text = "MIT"}
+keywords = ["yolo", "detection", "reinforcement-learning", "passenger-detection"]
+dependencies = [
+    "ultralytics>=8.0.0",
+    "torch>=2.6.0",
+    "torchvision>=0.17.0",
+    "opencv-python>=4.8.0",
+    "numpy>=2.0.0",
+    "pyyaml>=6.0",
+    "scikit-learn>=1.0.0",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=7.0.0",
+    "black>=22.0.0",
+    "ruff>=0.1.0",
+    "mypy>=0.990",
+]
+
+[project.urls]
+Repository = "https://github.com/yourusername/EV-PassengerDection-RL"
+
+[tool.setuptools]
+packages = ["src"]
