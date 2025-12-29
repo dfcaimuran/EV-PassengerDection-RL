@@ -128,22 +128,16 @@ Outputs sample detection results to `results/coco_full/passenger_detection/infer
 
 ## Inference Results
 
-Sample detections on COCO val2017 images:
+Sample detection on COCO val2017 image:
 
-![Detection 1](results/coco_full/passenger_detection/inference_results/inference_1.jpg) 
-![Detection 2](results/coco_full/passenger_detection/inference_results/inference_2.jpg)
+![Detection Sample](results/coco_full/passenger_detection/inference_results/inference_1.jpg)
 
-![Detection 3](results/coco_full/passenger_detection/inference_results/inference_3.jpg)
-![Detection 4](results/coco_full/passenger_detection/inference_results/inference_4.jpg)
-
-![Detection 5](results/coco_full/passenger_detection/inference_results/inference_5.jpg)
-![Detection 6](results/coco_full/passenger_detection/inference_results/inference_6.jpg)
-
-Generate updated charts:
+Generate inference results:
 ```bash
-python scripts/visualize_training.py
-python scripts/generate_report.py
+python scripts/generate_inference_results.py
 ```
+
+This generates 20 random sample detections and saves them to `results/coco_full/passenger_detection/inference_results/`
 
 ## Performance
 

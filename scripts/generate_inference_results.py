@@ -5,6 +5,7 @@ import os
 from pathlib import Path
 from ultralytics import YOLO
 import shutil
+import cv2
 
 def generate_inference_results():
     """Run inference on COCO val2017 images and save visualization."""
@@ -38,16 +39,19 @@ def generate_inference_results():
     # Load model
     model = YOLO(str(best_model))
     
-    # Run inference on first 6 images for visualization
-    image_files = sorted(list(data_dir.glob("*.jpg")))[:6]
-    print(f"\nProcessing {len(image_files)} images for visualization...")
+    # Get all COCO images and randomly select 20
+    all_images = sorted(list(data_dir.glob("*.jpg")))
+    import random
+    # random.seed(42)  # Comment out for true randomness on each run
+    image_files = random.sample(all_images, min(20, len(all_images)))
+    image_files = sorted(image_files)  # Sort for consistent order
     
-    # Save predictions directly to results directory
-    temp_output = Path("runs/detect/inference_temp")
+    print(f"\nProcessing {len(image_files)} randomly selected images for visualization...")
+    
+    # Run inference
     results = model.predict(
         source=[str(img) for img in image_files],
-        save=True,
-        save_dir=str(temp_output),
+        save=False,  # Don't auto-save
         conf=0.25,
         iou=0.45,
         imgsz=640,
@@ -57,28 +61,42 @@ def generate_inference_results():
     # Count detections
     total_detections = sum(len(r.boxes) for r in results)
     
-    # Copy results to main output directory
-    predict_dir = temp_output / "predict"
-    if predict_dir.exists():
-        # Get up to 6 best images (sorted by filename)
-        detection_images = sorted(list(predict_dir.glob("*.jpg")))[:6]
+    # Manually save annotated images
+    for i, result in enumerate(results, 1):
+        # Get the annotated image
+        im_array = result.plot()  # RGB array
         
-        print(f"\n✓ Inference complete!")
-        print(f"  Total detections: {total_detections}")
-        print(f"  Saving {len(detection_images)} sample detection images...")
+        # Convert RGB to BGR for cv2.imwrite
+        im_bgr = cv2.cvtColor(im_array, cv2.COLOR_RGB2BGR)
         
-        for i, img_path in enumerate(detection_images, 1):
-            dest = output_dir / f"inference_{i}.jpg"
-            shutil.copy(img_path, dest)
-            print(f"  ✓ {dest.name}")
+        # Add detection count in bottom-right corner
+        num_detections = len(result.boxes)
+        text = f"Detections: {num_detections}"
+        font = cv2.FONT_HERSHEY_SIMPLEX
+        font_scale = 1.2
+        font_thickness = 2
+        text_color = (0, 255, 0)  # Green in BGR
         
-        # Cleanup
-        import shutil as sh
-        sh.rmtree(temp_output, ignore_errors=True)
+        # Get text size to position it correctly
+        text_size = cv2.getTextSize(text, font, font_scale, font_thickness)[0]
+        h, w = im_bgr.shape[:2]
+        x = w - text_size[0] - 15  # 15 pixels from right edge
+        y = h - 15  # 15 pixels from bottom edge
         
-        print(f"\n✓ Inference results saved to: {output_dir.resolve()}")
-    else:
-        print(f"✗ Prediction directory not found at {predict_dir}")
+        # Add background rectangle for better visibility
+        cv2.rectangle(im_bgr, (x - 5, y - text_size[1] - 5), (w - 10, h - 5), (0, 0, 0), -1)
+        # Put text
+        cv2.putText(im_bgr, text, (x, y), font, font_scale, text_color, font_thickness)
+        
+        # Save to output directory
+        output_path = output_dir / f"inference_{i}.jpg"
+        cv2.imwrite(str(output_path), im_bgr)
+        print(f"  ✓ Saved: inference_{i}.jpg ({num_detections} detections)")
+    
+    print(f"\n✓ Inference complete!")
+    print(f"  Total detections: {total_detections}")
+    print(f"  Saved {len(results)} detection images")
+    print(f"  Location: {output_dir.resolve()}")
 
 if __name__ == "__main__":
     generate_inference_results()
