@@ -151,14 +151,14 @@ Outputs sample detection results to `results/coco_full/passenger_detection/infer
 
 Sample detection on COCO val2017 image:
 
-![Detection Sample](results/coco_full/passenger_detection/inference_results/inference_1.jpg)
+![Detection Sample](results/coco_full/passenger_detection/inference_results/inference_1.png)
 
 Generate inference results:
 ```bash
 python scripts/generate_inference_results.py
 ```
 
-This generates 20 random sample detections and saves them to `results/coco_full/passenger_detection/inference_results/`
+This generates 20 random sample detections and saves them to `results/coco_full/passenger_detection/inference_results/` (PNG format, lossless quality)
 
 ## Performance
 

@@ -89,9 +89,9 @@ def generate_inference_results():
         cv2.putText(im_bgr, text, (x, y), font, font_scale, text_color, font_thickness)
         
         # Save to output directory
-        output_path = output_dir / f"inference_{i}.jpg"
+        output_path = output_dir / f"inference_{i}.png"
         cv2.imwrite(str(output_path), im_bgr)
-        print(f"  ✓ Saved: inference_{i}.jpg ({num_detections} detections)")
+        print(f"  ✓ Saved: inference_{i}.png ({num_detections} detections)")
     
     print(f"\n✓ Inference complete!")
     print(f"  Total detections: {total_detections}")
