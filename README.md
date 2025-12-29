@@ -118,10 +118,31 @@ python -m src.train_rl --data data/coco/dataset.yaml --iterations 10 --lr 0.01
 - `training_report.html` - Interactive charts with Chart.js
 - `results.csv` - Complete metrics history
 
+**Generate Inference Results:**
+```bash
+# Run inference on COCO val2017 and save detection visualizations
+python scripts/generate_inference_results.py
+```
+
+Outputs sample detection results to `results/coco_full/passenger_detection/inference_results/`
+
+## Inference Results
+
+Sample detections on COCO val2017 images:
+
+![Detection 1](results/coco_full/passenger_detection/inference_results/inference_1.jpg) 
+![Detection 2](results/coco_full/passenger_detection/inference_results/inference_2.jpg)
+
+![Detection 3](results/coco_full/passenger_detection/inference_results/inference_3.jpg)
+![Detection 4](results/coco_full/passenger_detection/inference_results/inference_4.jpg)
+
+![Detection 5](results/coco_full/passenger_detection/inference_results/inference_5.jpg)
+![Detection 6](results/coco_full/passenger_detection/inference_results/inference_6.jpg)
+
 Generate updated charts:
 ```bash
-python visualize_training.py
-python generate_report.py
+python scripts/visualize_training.py
+python scripts/generate_report.py
 ```
 
 ## Performance
