@@ -14,7 +14,7 @@ Real-time passenger detection for electric vehicles using YOLOv11 with reinforce
 
 ### 1. Setup
 ```bash
-git clone https://github.com/yourusername/EV-PassengerDection-RL.git
+git clone https://github.com/dfcaimuran/EV-PassengerDection-RL.git
 cd EV-PassengerDection-RL
 python -m venv .venv
 .venv\Scripts\activate  # Windows
@@ -42,20 +42,35 @@ python -m src.cli --input-dir path/to/images/ --output-dir results/
 
 ```
 src/
-├── config.py              # Configuration
-├── train_rl.py            # RL-based PPO optimization
-├── reward.py              # Reward functions
-├── inference.py           # Detection inference
+├── config.py              # Configuration & hyperparameters
+├── train_rl.py            # PPO-based RL optimization (PRIMARY)
+├── reward.py              # Reward function definitions
+├── inference.py           # Detection inference pipeline
+├── inference_multitask.py # Multi-task inference
+├── train_multitask.py     # Multi-task training (for custom data)
 ├── cli.py                 # CLI interface
 ├── models/
 │   ├── detector.py        # YOLOv11 wrapper
+│   ├── multitask_model.py # Multi-task learning model
 │   └── preprocessor.py    # Image preprocessing
 └── utils/
     ├── data_utils.py      # Data utilities
-    └── visualization.py   # Visualization
+    ├── multitask_data.py  # Multi-task data loader
+    └── visualization.py   # Visualization utilities
 
 scripts/
-└── download_coco.py       # COCO downloader
+├── download_coco.py              # COCO dataset downloader
+├── data_converter.py             # Dataset format converter
+├── generate_inference_results.py # Generate detection visualizations
+├── visualize_training.py         # Create training charts
+└── generate_report.py            # Generate HTML report
+
+examples/
+├── example_model.py              # Model loading example
+├── example_training.py           # Training example
+├── example_inference.py          # Inference example
+├── example_data_loading.py       # Data loading example
+└── run_all_examples.py           # Run all examples
 ```
 
 ## Configuration
@@ -76,13 +91,19 @@ TRAIN_CONFIG = {
 
 ## System Requirements
 
-- Python 3.9+
-- PyTorch 2.6+ with CUDA 12.6+ (GPU) or CPU
-- 8GB+ RAM (16GB+ for GPU training)
+- **Python**: 3.11+
+- **PyTorch**: 2.11.0+ with CUDA 12.8+ (GPU) or CPU
+- **RAM**: 8GB+ (16GB+ recommended for GPU training)
+- **Storage**: 10GB+ (for COCO dataset + models)
 
 **GPU Support:** NVIDIA RTX 40/50 series with CUDA 12.8+
 
-Check GPU: `python verify_cuda_detailed.py`
+**Dependencies** (see requirements.txt):
+- torch==2.11.0.dev+cu128
+- ultralytics==8.3.241
+- opencv-python==4.12.0
+- numpy==2.2.6
+- scikit-learn==1.8.0
 
 ## RL Optimization Performance
 
@@ -141,30 +162,53 @@ This generates 20 random sample detections and saves them to `results/coco_full/
 
 ## Performance
 
-- **mAP@50**: 0.70+ (COCO person detection)
-- **mAP@50-95**: 0.55+ (strict evaluation)
-- **Inference**: 4-8ms per image (RTX 5070 Ti)
-
-## Troubleshooting
-
-**CUDA not available:**
-```bash
-python verify_cuda_detailed.py
-```
-
-**Out of memory:**
-```bash
-# Reduce batch size in src/config.py
-# Then run RL optimization with fewer iterations
-python -m src.train_rl --data data/coco/dataset.yaml --iterations 3
-```
+- **mAP@50**: 0.693 (Epoch 21/50)
+- **mAP@50-95**: 0.454 (Epoch 21/50)
+- **Precision**: 0.745
+- **Recall**: 0.601
+- **Inference Speed**: ~20-25ms per image (RTX 5070 Ti, batch=1)
+- **Training Speed**: ~78 minutes per epoch (COCO val2017, 5000 images)
 
 ## License
 
 MIT License - see [LICENSE](LICENSE)
 
-## Support
+## Contributing
 
-- Open GitHub issue for problems
-- See [DATASET_SETUP.md](DATASET_SETUP.md) for data preparation
-- Check [src/config.py](src/config.py) for configuration options
+Pull requests are welcome. For major changes, please open an issue first.
+
+## Citation
+
+If you use this project in your research, please cite:
+
+```bibtex
+@repo{ev_passenger_detection,
+  title={EV Passenger Detection - YOLOv11 + RL Optimization},
+  author={Caimuran},
+  year={2025},
+  url={https://github.com/dfcaimuran/EV-PassengerDection-RL}
+}
+```
+
+## Troubleshooting
+
+**CUDA Issues:**
+- Verify CUDA installation: `nvidia-smi`
+- Check PyTorch GPU support: `python -c "import torch; print(torch.cuda.is_available())"`
+
+**Out of Memory (OOM):**
+```bash
+# Reduce batch size in src/config.py
+# Then run with fewer RL iterations
+python -m src.train_rl --data data/coco/dataset.yaml --iterations 3
+```
+
+**Model Not Found:**
+- Download pre-trained weights: `yolo11m.pt` and `yolo11n.pt` are automatically cached
+- Or manually place them in project root
+
+## Documentation
+
+- [DATASET_SETUP.md](DATASET_SETUP.md) - Data preparation guide
+- [MULTITASK_GUIDE.md](MULTITASK_GUIDE.md) - Multi-task learning framework
+- [examples/README.md](examples/README.md) - Code examples
