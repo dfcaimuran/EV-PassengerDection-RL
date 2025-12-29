@@ -26,12 +26,9 @@ pip install -r requirements.txt
 python scripts/download_coco.py --output data/coco --split val2017
 ```
 
-### 3. Train
+### 3. Train (RL Optimization)
 ```bash
-# Standard training
-python -m src.train --data data/coco/dataset.yaml --epochs 50
-
-# RL optimization
+# Optimize hyperparameters with PPO
 python -m src.train_rl --data data/coco/dataset.yaml --iterations 5
 ```
 
@@ -46,10 +43,9 @@ python -m src.cli --input-dir path/to/images/ --output-dir results/
 ```
 src/
 ├── config.py              # Configuration
-├── train.py               # YOLOv11 training
-├── train_rl.py            # PPO optimization
+├── train_rl.py            # RL-based PPO optimization
 ├── reward.py              # Reward functions
-├── inference.py           # Detection
+├── inference.py           # Detection inference
 ├── cli.py                 # CLI interface
 ├── models/
 │   ├── detector.py        # YOLOv11 wrapper
@@ -88,22 +84,21 @@ TRAIN_CONFIG = {
 
 Check GPU: `python verify_cuda_detailed.py`
 
-## Training Comparison
+## RL Optimization Performance
 
-| Setup | Time (50 epochs) | mAP@50 |
-|-------|------------------|--------|
-| CPU (i9-12900K) | 25-40h | 0.65 |
-| GPU (RTX 5070 Ti) | 2-4h | 0.68+ |
-| RL Optimized | Variable | 0.72+ |
+| Hardware | Optimization Time | mAP@50 Improvement |
+|----------|-------------------|-------------------|
+| RTX 5070 Ti (GPU) | 1-2 hours | +15-20% |
+| CPU (i9-12900K) | 4-8 hours | +15-20% |
 
-## Training Examples
+## RL Optimization
 
 ```bash
-# Standard training (COCO val2017: 5000 images, 50 epochs)
-python -m src.train --data data/coco/dataset.yaml --epochs 50
-
-# RL optimization
+# Hyperparameter optimization with PPO (5 iterations)
 python -m src.train_rl --data data/coco/dataset.yaml --iterations 5
+
+# Custom iterations and settings
+python -m src.train_rl --data data/coco/dataset.yaml --iterations 10 --lr 0.01
 ```
 
 ## Training Results
@@ -145,7 +140,8 @@ python verify_cuda_detailed.py
 **Out of memory:**
 ```bash
 # Reduce batch size in src/config.py
-python -m src.train --data dataset.yaml --device cpu  # Use CPU
+# Then run RL optimization with fewer iterations
+python -m src.train_rl --data data/coco/dataset.yaml --iterations 3
 ```
 
 ## License

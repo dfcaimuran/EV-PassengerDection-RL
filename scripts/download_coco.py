@@ -238,11 +238,8 @@ def main():
         print("="*60)
         print(f"\nDataset path: {downloader.output_dir.absolute()}")
         print(f"Dataset YAML: {downloader.output_dir / 'dataset.yaml'}")
-        print("\nNext steps:")
-        print("1. Train with standard method:")
-        print(f"   python -m src.train --data {args.output}/dataset.yaml --epochs 100")
-        print("\n2. Or optimize with RL:")
-        print(f"   python -m src.train_rl --data {args.output}/dataset.yaml --iterations 10")
+        print("\nNext step:")
+        print(f"   python -m src.train_rl --data {args.output}/dataset.yaml --iterations 5")
         
     except Exception as e:
         print(f"\n✗ Error: {e}")
